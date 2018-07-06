@@ -7,36 +7,93 @@ class StatsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer"
+    @sorted_numbers = @numbers.sort
 
-    @count = "Replace this string with your answer"
+    @count = @numbers.count
 
-    @minimum = "Replace this string with your answer"
+    @minimum = @numbers.min
 
-    @maximum = "Replace this string with your answer"
+    @maximum = @numbers.max
 
-    @range = "Replace this string with your answer"
+    @range = @maximum - @minimum
 
     # Median
     # ======
 
-    @median = "Replace this string with your answer"
+    @sort_num = @numbers.sort
 
-    @sum = "Replace this string with your answer"
+    if @sort_num.length.odd?
+      @num_key = (@sort_num.length)/2.0 - 0.5
+      @median = @sort_num[@num_key]
+    else
+      @num_key_1 = (@sort_num.length)/2.0
+      @median_1 = @sort_num[@num_key_1]
+      @num_key_2 = (@sort_num.length)/2.0 - 1.0
+      @median_2 = @sort_num[@num_key_2]
+      @median = (@median_1 + @median_2)/2.0
+    end
+    
+    @sum = 0
+    @numbers.each do |num|
+      @sum = @sum + num
+    end
 
-    @mean = "Replace this string with your answer"
+    @mean = @sum/@count
 
     # Variance
     # ========
 
-    @variance = "Replace this string with your answer"
-
-    @standard_deviation = "Replace this string with your answer"
-
+    @variance = 0
+    @numbers.each do |num|
+      @variance = @variance + (num - @mean)**2
+    end
+    
+    @variance = @variance / @count
+    
+    @standard_deviation = (@variance**((0.5)))
+    
     # Mode
     # ====
 
-    @mode = "Replace this string with your answer"
+    @loop_count = 1
+    @num_counts = []
+    @count_num = 0
+    while @loop_count <= (@numbers.length) do
+      @count_num = @numbers[@loop_count-1]
+      @counter = 0
+      @numbers.each do |num|
+        if num == @count_num
+         @counter = @counter + 1
+        end
+      end
+      @num_counts.push(@counter)
+      @loop_count = @loop_count + 1
+    end
+    
+    @max_counts = @num_counts[0]
+    @num_counts.each do |num|
+      if (num > @max_counts) 
+        @max_counts = num
+      end
+    end
+  
+    @loop_count = 1
+    @num_counts = []
+    @count_num = 0
+      while @loop_count <= (@numbers.uniq.length) do
+      @count_num = @numbers.uniq[@loop_count-1]
+      @counter = 0
+      @numbers.each do |num|
+        if num == @count_num
+         @counter = @counter + 1
+          if @counter == @max_counts
+            @mode = @count_num
+          end
+        end
+      end
+      @num_counts.push(@counter)
+      @loop_count = @loop_count + 1
+    end
 
     # ================================================================================
     # Your code goes above.
